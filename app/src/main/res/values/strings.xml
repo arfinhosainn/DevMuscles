@@ -1,3 +1,19 @@
 <resources>
     <string name="app_name">DevMuscles</string>
+
+    <!--    EmailField Compose Component -->
+    <string name="emailField_label">Email Address</string>
+    <string name="emailField_placeholder">Email Address</string>
+    <string name="emailField_description_isValid">Email Address is valid</string>
+    <string name="emailField_description_isInvalid">Email Address is not valid</string>
+    <string name="emailField_description_email">Email entry field</string>
+
+    <!--    TextEntryField Component -->
+    <string name="textEntryField_description_isValid">Text entry is valid</string>
+    <string name="textEntryField_description_isInvalid">Text entry is invalid</string>
+    <string name="textEntryField_label">Text Entry</string>
+    <string name="textEntryField_placeholder">Enter Text</string>
+    <string name="register_network_error">Register network error - %s</string>
+
+
 </resources>
