@@ -1,4 +1,4 @@
-package com.example.devmuscles.ui.theme
+package com.example.devmuscles.core.appdesignsystem.theme
 
 import androidx.compose.ui.graphics.Color
 
@@ -9,3 +9,6 @@ val Pink80 = Color(0xFFEFB8C8)
 val Purple40 = Color(0xFF6650a4)
 val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
+
+
+val DevMusclesLightGreen = Color(0xFFD0FD3E)
