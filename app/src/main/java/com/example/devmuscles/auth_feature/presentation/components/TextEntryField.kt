@@ -19,6 +19,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.VisualTransformation
 import com.example.devmuscles.R
 import com.example.devmuscles.core.appdesignsystem.theme.textEntryFieldTextStyle
 import com.example.devmuscles.core.util.UiText
@@ -40,8 +41,11 @@ fun TextEntryField(
             keyboardType = KeyboardType.Text,
             imeAction = ImeAction.Next
         ),
+    singleLine: Boolean = false,
     keyboardActions: KeyboardActions? = null,
     leadingIcon: @Composable (() -> Unit)? = null,
+    trailingIcon: @Composable (() -> Unit)? = null,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
     validInputDescription: String =
         UiText.Res(R.string.textEntryField_description_isValid).get,
     invalidInputDescription: String = UiText.Res(R.string.textEntryField_description_isInvalid).get
@@ -61,9 +65,9 @@ fun TextEntryField(
         singleLine = true,
         isError = isError,
         placeholder = {
-            Text(text = "Email")
+            Text(text = placeHolder)
         },
-        colors = colors ,
+        colors = colors,
         keyboardOptions = keyboardOptions,
         keyboardActions = keyBoardActionsLocal,
         trailingIcon = {

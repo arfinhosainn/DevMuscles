@@ -35,7 +35,7 @@ fun EmailField(
         KeyboardOptions(
             keyboardType = KeyboardType.Email,
             imeAction = ImeAction.Next
-        ),
+        )
 ) {
 
     val focusManager = LocalFocusManager.current
@@ -63,6 +63,8 @@ fun EmailField(
         colors = TextFieldDefaults.colors(
             focusedContainerColor = Color.Transparent,
             unfocusedContainerColor = Color.Transparent,
+            errorContainerColor = Color.Transparent,
+            focusedIndicatorColor = Color.DarkGray
         )
     )
 

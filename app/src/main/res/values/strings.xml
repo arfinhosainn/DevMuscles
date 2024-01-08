@@ -8,6 +8,14 @@
     <string name="emailField_description_isInvalid">Email Address is not valid</string>
     <string name="emailField_description_email">Email entry field</string>
 
+
+    <!--    PasswordField  Component -->
+    <string name="passwordField_label">Password</string>
+    <string name="passwordField_placeholder">Password</string>
+    <string name="passwordField_description_hide">Hide password</string>
+    <string name="passwordField_description_show">Show password</string>
+    <string name="passwordField_description_lock">Password entry field</string>
+
     <!--    TextEntryField Component -->
     <string name="textEntryField_description_isValid">Text entry is valid</string>
     <string name="textEntryField_description_isInvalid">Text entry is invalid</string>
