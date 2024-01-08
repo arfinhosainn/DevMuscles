@@ -16,6 +16,14 @@
     <string name="passwordField_description_show">Show password</string>
     <string name="passwordField_description_lock">Password entry field</string>
 
+    <!--    NameField Compose Component -->
+    <string name="nameField_label">Name</string>
+    <string name="nameField_placeholder">Name</string>
+    <string name="nameField_description_isValid">Name is valid</string>
+    <string name="nameField_description_isInvalid">Name is not valid</string>
+    <string name="nameField_description_name">Name entry field</string>
+
+
     <!--    TextEntryField Component -->
     <string name="textEntryField_description_isValid">Text entry is valid</string>
     <string name="textEntryField_description_isInvalid">Text entry is invalid</string>
