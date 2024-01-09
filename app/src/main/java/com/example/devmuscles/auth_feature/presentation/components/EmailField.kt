@@ -6,6 +6,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -24,7 +25,7 @@ import com.example.devmuscles.core.util.UiText
 fun EmailField(
     modifier: Modifier = Modifier.fillMaxWidth(),
     value: String,
-    label: String? = UiText.Res(R.string.emailField_label).get,
+    label: String = "Email",
     labelComponent: @Composable (() -> Unit)? =
         { Text(text = label ?: UiText.Res(R.string.emailField_label).get) },
     placeHolder: String = UiText.Res(R.string.emailField_placeholder).get,
@@ -47,9 +48,11 @@ fun EmailField(
         )
 
     TextEntryField(
+        modifier = modifier,
         value = value, isError = isError, onValueChange = onValueChange,
-        label = label,
-        placeHolder = placeHolder,
+        label = {
+            Text(text = label,color = MaterialTheme.colorScheme.secondary)
+        },
         keyboardActions = keyboardActionsLocal,
         keyboardOptions = keyboardOptions,
         leadingIcon = {
@@ -77,7 +80,7 @@ fun EmailFieldPreview() {
     DevMusclesTheme {
         EmailField(
             value = "",
-            label = null,
+            label = "null",
             isError = false,
             onValueChange = {}
         )

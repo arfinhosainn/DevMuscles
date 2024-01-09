@@ -30,10 +30,7 @@ fun TextEntryField(
     value: String,
     textStyle: TextStyle = textEntryFieldTextStyle(),
     colors: TextFieldColors,
-    label: String? = UiText.Res(R.string.emailField_label).get,
-    labelComponent: @Composable (() -> Unit)? =
-        { Text(text = label ?: UiText.Res(R.string.emailField_label).get) },
-    placeHolder: String = UiText.Res(R.string.emailField_placeholder).get,
+    label:  @Composable (() -> Unit )? = null,
     isError: Boolean,
     onValueChange: (String) -> Unit,
     keyboardOptions: KeyboardOptions =
@@ -64,9 +61,7 @@ fun TextEntryField(
         onValueChange = onValueChange,
         singleLine = true,
         isError = isError,
-        placeholder = {
-            Text(text = placeHolder)
-        },
+        label = label,
         colors = colors,
         keyboardOptions = keyboardOptions,
         keyboardActions = keyBoardActionsLocal,

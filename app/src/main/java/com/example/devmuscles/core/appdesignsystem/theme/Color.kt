@@ -12,3 +12,4 @@ val Pink40 = Color(0xFF7D5260)
 
 
 val DevMusclesLightGreen = Color(0xFFD0FD3E)
+val DevMusclesLightBlack = Color(0xFF0E0D0D)

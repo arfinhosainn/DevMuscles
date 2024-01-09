@@ -22,7 +22,8 @@ private fun darkColorPalette(): ColorScheme {
         background = Color.Black,
         surface = Color.Black,
         onSurface = Color.White,
-        onBackground = Color.White
+        onBackground = Color.White,
+        secondary = Color.Black
 
     )
 }
@@ -39,7 +40,7 @@ private fun lightColorPalette(): ColorScheme {
         onSecondary = Color.White,
         background = Color.White,
         surface = Color.White,
-        onSurface = Color.Black,
+        onSurface = DevMusclesLightBlack,
         onBackground = Color.Black,
     )
 }

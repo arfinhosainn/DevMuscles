@@ -1,5 +1,6 @@
 package com.example.devmuscles.core.appdesignsystem.theme
 
+import android.view.RoundedCorner
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Shapes
 import androidx.compose.ui.unit.dp
@@ -17,5 +18,7 @@ object DevMusclesShapes {
     val WideButtonRoundedCorners =
         RoundedCornerShape(DP.medium)
     val MediumButtonRoundedCorners =
-        RoundedCornerShape(DP.small)
+        RoundedCornerShape(DP.xxSmall)
+    val SmallButtonRoundedCorners =
+        RoundedCornerShape(DP.XXXLarge)
 }

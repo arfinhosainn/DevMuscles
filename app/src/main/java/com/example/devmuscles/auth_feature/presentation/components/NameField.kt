@@ -55,7 +55,6 @@ fun NameField(
         ),
         isError = isError,
         onValueChange = onValueChange,
-        placeHolder = placeholder,
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActionsLocal,
         validInputDescription = UiText.Res(R.string.nameField_description_isValid).get,
