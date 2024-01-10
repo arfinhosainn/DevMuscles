@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.example.devmuscles.auth_feature.presentation.login_screen.LoginScreenContent
+import com.example.devmuscles.auth_feature.presentation.register_screen.RegisterScreenContent
 import com.example.devmuscles.core.appdesignsystem.theme.DevMusclesTheme
 
 class MainActivity : ComponentActivity() {
@@ -41,7 +42,7 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
-                        LoginScreenContent()
+                        RegisterScreenContent()
                     }
 
                 }

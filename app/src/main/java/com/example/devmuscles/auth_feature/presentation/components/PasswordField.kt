@@ -11,7 +11,6 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -38,7 +37,7 @@ fun PasswordField(
     modifier: Modifier = Modifier.fillMaxWidth(),
     value: String,
     textStyle: TextStyle = textEntryFieldTextStyle(),
-    label: String = "Password",
+    label: String? = UiText.Res(R.string.passwordField_label).get,
     labelComponent: @Composable (() -> Unit)? =
         { Text(text = label ?: UiText.Res(R.string.emailField_label).get) },
     placeHolder: String = UiText.Res(R.string.passwordField_placeholder).get,
@@ -77,9 +76,7 @@ fun PasswordField(
         ),
         isError = isError,
         onValueChange = onValueChange,
-        label = {
-            Text(text = label, color = MaterialTheme.colorScheme.secondary)
-        },
+        label = if(label != null) labelComponent else null,
         modifier = modifier,
         visualTransformation =
         if (isPasswordVisible)

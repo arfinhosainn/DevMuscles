@@ -1,4 +1,4 @@
-package com.example.devmuscles.auth_feature.presentation.login_screen
+package com.example.devmuscles.auth_feature.presentation.register_screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowRight
 import androidx.compose.material.icons.filled.Deblur
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -25,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
@@ -36,18 +38,17 @@ import com.example.devmuscles.auth_feature.presentation.components.PasswordField
 import com.example.devmuscles.core.appdesignsystem.common.modifiers.devMusclesSmallButton
 import com.example.devmuscles.core.appdesignsystem.common.modifiers.devMusclesWideButton
 import com.example.devmuscles.core.appdesignsystem.common.modifiers.extraLargeHeight
+import com.example.devmuscles.core.appdesignsystem.common.modifiers.hugeHeight
 import com.example.devmuscles.core.appdesignsystem.common.modifiers.largeWidth
 import com.example.devmuscles.core.appdesignsystem.common.modifiers.mediumHeight
 import com.example.devmuscles.core.appdesignsystem.common.modifiers.mediumWidth
 import com.example.devmuscles.core.appdesignsystem.theme.fonts
+import com.example.devmuscles.core.util.UiText
 
 @Composable
-fun LoginScreenContent(
-    email: String? = null,
-    confirmPassword: String? = null,
+fun RegisterScreenContent(
     modifier: Modifier = Modifier
 ) {
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -58,13 +59,13 @@ fun LoginScreenContent(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(500.dp)
+                .height(384.dp)
 
         ) {
             Image(
                 modifier = Modifier.fillMaxSize(),
-                painter = painterResource(id = R.drawable.login_background),
-                contentDescription = "Login_background",
+                painter = painterResource(id = R.drawable.register_background),
+                contentDescription = UiText.Res(R.string.register_background_image).get,
                 contentScale = ContentScale.FillBounds
             )
 
@@ -76,8 +77,7 @@ fun LoginScreenContent(
             ) {
                 Text(
                     modifier = Modifier,
-                    text = "Sign Up",
-                    // Footnote/Medium
+                    text = UiText.Res(R.string.login_button).get,
                     style = MaterialTheme.typography.bodySmall,
                     fontWeight = FontWeight.Normal,
                     color = Color.White,
@@ -90,7 +90,7 @@ fun LoginScreenContent(
                 modifier = Modifier
                     .padding(bottom = 120.dp, start = 8.dp, end = 8.dp)
                     .align(Alignment.BottomCenter),
-                text = "Welcome Back,",
+                text = UiText.Res(R.string.register_screen_headline).get,
                 fontSize = 38.sp,
                 style = MaterialTheme.typography.headlineLarge,
                 fontWeight = FontWeight.Normal,
@@ -99,12 +99,13 @@ fun LoginScreenContent(
             )
             Text(
                 modifier = Modifier
-                    .padding(bottom = 70.dp, start = 34.dp, end = 8.dp)
+                    .padding(bottom = 65.dp, start = 34.dp, end = 8.dp)
                     .align(Alignment.BottomStart),
-                text = "Arfin,",
-                fontSize = 38.sp,
-                style = MaterialTheme.typography.headlineLarge,
-                fontWeight = FontWeight.Bold,
+                text = UiText.Res(R.string.register_screen_description).get,
+                fontSize = 10.sp,
+                style = MaterialTheme.typography.bodyLarge,
+                fontWeight = FontWeight.Normal,
+                lineHeight = 16.sp,
                 color = MaterialTheme.colorScheme.surface,
                 fontFamily = fonts
             )
@@ -129,21 +130,27 @@ fun LoginScreenContent(
                 isError = false,
                 clickTogglePasswordVisibility = { /*TODO*/ },
                 onValueChange = {},
-                imeAction = ImeAction.Done,
-                label = "Password"
+                imeAction = ImeAction.Done
             )
             Spacer(modifier = Modifier.mediumHeight())
-            Text(
-                modifier = Modifier.align(Alignment.End),
-                text = "Forgot Password",
-                // Footnote/Medium
-                style = MaterialTheme.typography.bodySmall,
-                fontWeight = FontWeight.Normal,
-                color = Color(0xFFD0FD3E),
-                fontFamily = fonts
-            )
+            // • CONFIRM PASSWORD
+            PasswordField(
+                label = UiText.Res(R.string.register_label_confirm_password).get,
+                value = "",
+                isError = false,
+                onValueChange = {
 
-            Spacer(modifier = modifier.extraLargeHeight())
+                },
+                isPasswordVisible = false,
+                clickTogglePasswordVisibility = {
+                },
+                imeAction = ImeAction.Done,
+                doneAction = {
+                }
+            )
+            Spacer(modifier = Modifier.mediumHeight())
+
+            Spacer(modifier = modifier.hugeHeight())
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -177,22 +184,23 @@ fun LoginScreenContent(
 
                 Spacer(modifier = Modifier.largeWidth())
 
-                //• Login button
+                //• SignUp button
                 Button(
                     modifier = modifier.devMusclesWideButton(),
                     onClick = { /* Handle third button click */ },
                     contentPadding = PaddingValues(0.dp),
                 ) {
-                    Text(text = "Third Button")
+                    Text(text = UiText.Res(R.string.register_button).get)
+                    Icon(imageVector = Icons.Filled.ArrowRight, contentDescription = "")
                 }
             }
         }
     }
 }
 
-
 @Preview(showBackground = true)
 @Composable
-fun PreviewLoginContent() {
-    LoginScreenContent()
+fun PreviewRegisterScreen() {
+    RegisterScreenContent()
+
 }
