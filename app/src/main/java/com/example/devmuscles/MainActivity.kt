@@ -7,14 +7,10 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import com.example.devmuscles.auth_feature.presentation.login_screen.LoginScreenContent
 import com.example.devmuscles.auth_feature.presentation.register_screen.RegisterScreenContent
 import com.example.devmuscles.core.appdesignsystem.theme.DevMusclesTheme
 

@@ -4,6 +4,7 @@ buildscript {
     dependencies {
         classpath("com.google.dagger:hilt-android-gradle-plugin:2.48.1")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version")
+        classpath ("org.jetbrains.kotlin:kotlin-serialization:$kotlin_version")
     }
     repositories {
         mavenCentral()

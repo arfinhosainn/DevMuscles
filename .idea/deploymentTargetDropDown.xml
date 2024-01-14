@@ -2,21 +2,6 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="EmailFieldPreview">
-        <State />
-      </entry>
-      <entry key="EmailFieldPreviewError">
-        <State />
-      </entry>
-      <entry key="EmailFieldPreviewValid">
-        <State />
-      </entry>
-      <entry key="PasswordFieldPreview">
-        <State />
-      </entry>
-      <entry key="PreviewLoginContent">
-        <State />
-      </entry>
       <entry key="app">
         <State />
       </entry>
