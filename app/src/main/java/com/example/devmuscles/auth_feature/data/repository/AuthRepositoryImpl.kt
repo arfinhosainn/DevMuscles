@@ -1,5 +1,7 @@
 package com.example.devmuscles.auth_feature.data.repository
 
+import com.example.devmuscles.auth_feature.data.repository.local.AuthDao
+import com.example.devmuscles.auth_feature.data.repository.remote.AuthApi
 import com.example.devmuscles.auth_feature.domain.AuthInfo
 import com.example.devmuscles.auth_feature.domain.AuthRepository
 import com.example.devmuscles.auth_feature.domain.validation.ValidateEmail
@@ -11,13 +13,12 @@ import com.example.devmuscles.core.util.Username
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
-): AuthRepository{
-    override val validateEmail: ValidateEmail
-        get() = TODO("Not yet implemented")
-    override val validatePassword: ValidatePassword
-        get() = TODO("Not yet implemented")
-    override val validateUsername: ValidateUsername
-        get() = TODO("Not yet implemented")
+    private val authDao: AuthDao,
+    private val authApi: AuthApi,
+    override val validateEmail: ValidateEmail,
+    override val validatePassword: ValidatePassword,
+    override val validateUsername: ValidateUsername,
+) : AuthRepository {
 
     override suspend fun login(email: Email, password: Password): AuthInfo {
         TODO("Not yet implemented")
