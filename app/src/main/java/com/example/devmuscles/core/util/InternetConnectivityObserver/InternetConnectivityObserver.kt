@@ -1,4 +1,4 @@
-package com.example.devmuscles.core.util
+package com.example.devmuscles.core.util.InternetConnectivityObserver
 
 import kotlinx.coroutines.flow.Flow
 

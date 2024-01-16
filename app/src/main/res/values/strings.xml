@@ -57,4 +57,14 @@
     <string name="login_button">LOG IN</string>
     <string name="error_login_error">Login error - %s</string>
 
+    <!--    Error Messages (general)-->
+    <string name="error_unknown">Unknown error - %s</string>
+    <string name="error_invalid_email">Invalid email address</string>
+    <string name="error_invalid_password">Invalid password</string>
+    <string name="error_invalid_confirm_password">Invalid confirm password</string>
+    <string name="error_invalid_username">Invalid username, must be 4–50 characters</string>
+    <string name="error_invalid_user_name">Invalid user name</string>
+    <string name="error_invalid_string_resource_id">Invalid String Resource id</string>
+    <string name="error_unknown_agenda_type">Unknown Agenda Type</string>
+
 </resources>

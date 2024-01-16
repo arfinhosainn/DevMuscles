@@ -90,6 +90,10 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:5.0.0-alpha.3")
     implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.3")
 
+    // Proto DataStore
+    implementation ("androidx.datastore:datastore-preferences:1.0.0")
+    implementation ("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5")
+
     //extended icons
     implementation("androidx.compose.material:material-icons-extended:1.5.4")
 
@@ -101,10 +105,17 @@ dependencies {
     implementation ("androidx.paging:paging-runtime-ktx:3.2.1")
     implementation ("androidx.paging:paging-compose:3.3.0-alpha02")
 
+    // Logging with Logcat
+    implementation ("com.squareup.logcat:logcat:0.1")
+
     // Room
     implementation("androidx.room:room-ktx:2.6.1")
     ksp("androidx.room:room-compiler:2.6.1")
     implementation ("androidx.room:room-paging:2.6.1")
+
+    //Moshi Converter
+    implementation("com.squareup.moshi:moshi-kotlin:1.14.0")
+    ksp("com.squareup.moshi:moshi-kotlin-codegen:1.14.0")
 
 
 }
