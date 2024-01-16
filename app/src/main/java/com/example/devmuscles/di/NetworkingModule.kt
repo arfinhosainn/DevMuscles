@@ -1,9 +1,14 @@
 package com.example.devmuscles.di
 
+import Constants
 import com.example.devmuscles.auth_feature.data.repository.local.AuthDao
 import com.example.devmuscles.auth_feature.data.repository.remote.AuthApi
 import com.example.devmuscles.auth_feature.data.repository.remote.AuthApi.Companion.createBearerTokenString
+import com.example.devmuscles.auth_feature.domain.datastore.UserPreferences
 import com.example.devmuscles.core.data.remote.DevMusclesApi
+import com.example.devmuscles.core.util.ApiKeyInterceptor
+import com.example.devmuscles.core.util.ApiTokenInterceptor
+import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,54 +29,22 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkingModule {
-
-
     @Provides
     @Singleton
-    fun provideOkHttpClient(
-        @AuthDaoProdUsingBinds authDao: AuthDao
-    ): OkHttpClient {
-        val dispatcher = Dispatcher(Executors.newFixedThreadPool(20))
-        dispatcher.maxRequests = 20
-        dispatcher.maxRequestsPerHost = 20
-
-        val addHeadersInterceptor = Interceptor { chain ->
-            runBlocking(Dispatchers.IO) {
-                val requestBuilder = chain.request().newBuilder()
-                    .addHeader("x-api-key", DevMusclesApi.API_KEY)
-
-                AuthApi.getAuthToken {
-                    authDao.getAuthToken()
-                }?.let { authToken ->
-                    requestBuilder.addHeader("Authorization", createBearerTokenString(authToken))
-                }
-                val request = requestBuilder.build()
-
-                chain.proceed(request)
-            }
-        }
+    fun provideOkHttpClient(userPrefs: UserPreferences): OkHttpClient {
         return OkHttpClient.Builder()
-            .dispatcher(dispatcher)
-            .addInterceptor(addHeadersInterceptor)
-            .connectTimeout(1, TimeUnit.MINUTES)
-            .callTimeout(1, TimeUnit.MINUTES)
-            .readTimeout(1, TimeUnit.MINUTES)
-            .writeTimeout(1, TimeUnit.MINUTES)
+            .addInterceptor(ApiKeyInterceptor(Constants.API_KEY))
+            .addInterceptor(ApiTokenInterceptor(userPrefs))
             .build()
     }
 
     @Provides
     @Singleton
-    fun provideDevMusclesApi(
-        okHttpClient: OkHttpClient,
-        converterFactory: Converter.Factory
-    ): DevMusclesApi {
-        return Retrofit.Builder()
-            .baseUrl(DevMusclesApi.BASE_URL)
-            .client(okHttpClient)
-            .addConverterFactory(converterFactory)
+    fun provideMoshi(): Moshi {
+        return Moshi
+            .Builder()
+            .add(KotlinJsonAdapterFactory())
             .build()
-            .create()
     }
 
 }

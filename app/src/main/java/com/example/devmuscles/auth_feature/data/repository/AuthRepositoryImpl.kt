@@ -1,58 +1,82 @@
 package com.example.devmuscles.auth_feature.data.repository
 
-import com.example.devmuscles.auth_feature.data.repository.local.AuthDao
 import com.example.devmuscles.auth_feature.data.repository.remote.AuthApi
-import com.example.devmuscles.auth_feature.domain.AuthInfo
+import com.example.devmuscles.auth_feature.data.repository.remote.DTOs.auth.LoginRequest
+import com.example.devmuscles.auth_feature.data.repository.remote.DTOs.auth.RegistrationRequest
+import com.example.devmuscles.auth_feature.data.util.AuthResult
 import com.example.devmuscles.auth_feature.domain.AuthRepository
-import com.example.devmuscles.auth_feature.domain.validation.ValidateEmail
-import com.example.devmuscles.auth_feature.domain.validation.ValidatePassword
-import com.example.devmuscles.auth_feature.domain.validation.ValidateUsername
-import com.example.devmuscles.core.util.Email
-import com.example.devmuscles.core.util.Password
-import com.example.devmuscles.core.util.Username
+import com.example.devmuscles.auth_feature.domain.AuthenticatedUser
+import com.example.devmuscles.auth_feature.domain.datastore.UserPreferences
+import retrofit2.HttpException
+import java.util.concurrent.CancellationException
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
-    private val authDao: AuthDao,
-    private val authApi: AuthApi,
-    override val validateEmail: ValidateEmail,
-    override val validatePassword: ValidatePassword,
-    override val validateUsername: ValidateUsername,
+    private val api: AuthApi,
+    private val userPreferences: UserPreferences
 ) : AuthRepository {
+    override suspend fun signUp(fullName: String, email: String, password: String): AuthResult {
 
-    override suspend fun login(email: Email, password: Password): AuthInfo {
-        TODO("Not yet implemented")
+        return try {
+            api.register(
+                RegistrationRequest(
+                    fullName = fullName,
+                    email = email,
+                    password = password
+                )
+            )
+            signIn(email, password)
+        } catch (e: HttpException) {
+            if (e.code() == 401) {
+                AuthResult.Unauthorized(e.message)
+            } else {
+                AuthResult.Error(e.message)
+            }
+        } catch (e: Exception) {
+            if (e is CancellationException) throw e
+            AuthResult.Error(e.message)
+        }
+
     }
 
-    override suspend fun register(username: Username, email: Email, password: Password) {
-        TODO("Not yet implemented")
+    override suspend fun signIn(email: String, password: String): AuthResult {
+        return try {
+            val response = api.login(LoginRequest(email, password))
+            userPreferences.saveAuthenticatedUser(
+                AuthenticatedUser(
+                    fullName = response.body()?.fullName
+                        ?: return AuthResult.Error("Error Singing In"),
+                    email = email,
+                    token = response.body()?.token ?: return AuthResult.Error("Error Signing In"),
+                    userId = response.body()?.userId ?: return AuthResult.Error("Error Signing In")
+                )
+            )
+            AuthResult.Authorized()
+        } catch (e: HttpException) {
+            if (e.code() == 401) {
+                AuthResult.Unauthorized(e.message)
+            } else {
+                AuthResult.Error(e.message)
+            }
+        } catch (e: Exception) {
+            if (e is CancellationException) throw e
+            AuthResult.Error(e.message)
+        }
     }
 
-    override suspend fun logout() {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun setAuthInfo(authInfo: AuthInfo?) {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun getAuthInfo(): AuthInfo? {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun clearAuthInfo() {
-        TODO("Not yet implemented")
-    }
-
-    override fun getAuthUserId(): String? {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun authenticate(): Boolean {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun authenticateAuthInfo(authInfo: AuthInfo?): Boolean {
-        TODO("Not yet implemented")
+    override suspend fun authenticate(): AuthResult {
+        return try {
+            api.authenticate()
+            AuthResult.Authorized()
+        } catch (e: HttpException) {
+            if (e.code() == 401) {
+                AuthResult.Unauthorized(e.message)
+            } else {
+                AuthResult.Error(e.message)
+            }
+        } catch (e: Exception) {
+            if (e is CancellationException) throw e
+            AuthResult.Error(e.message)
+        }
     }
 }
