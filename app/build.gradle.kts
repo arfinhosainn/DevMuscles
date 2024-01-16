@@ -113,5 +113,9 @@ dependencies {
     ksp("androidx.room:room-compiler:2.6.1")
     implementation ("androidx.room:room-paging:2.6.1")
 
+    //Moshi Converter
+    implementation("com.squareup.moshi:moshi-kotlin:1.14.0")
+    ksp("com.squareup.moshi:moshi-kotlin-codegen:1.14.0")
+
 
 }

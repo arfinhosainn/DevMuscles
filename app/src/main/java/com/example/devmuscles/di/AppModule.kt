@@ -1,46 +1,57 @@
 package com.example.devmuscles.di
 
-import androidx.datastore.core.DataStore
-import com.example.devmuscles.auth_feature.domain.validation.ValidateEmail
-import com.example.devmuscles.auth_feature.domain.validation.ValidatePassword
-import com.example.devmuscles.auth_feature.domain.validation.ValidateUsername
-import com.example.devmuscles.core.data.settings.AppSettings
-import com.example.devmuscles.core.data.settings.AppSettingsRepositoryImpl
-import com.example.devmuscles.core.domain.AppSettingRepository
+import Constants
+import android.content.Context
+import android.content.SharedPreferences
+import com.example.devmuscles.auth_feature.domain.datastore.UserPreferences
+import com.example.devmuscles.core.util.ApiKeyInterceptor
+import com.example.devmuscles.core.util.ApiTokenInterceptor
+import com.example.devmuscles.core.util.InternetConnectivityObserver.InternetConnectivityObserver
+import com.example.devmuscles.core.util.InternetConnectivityObserver.InternetConnectivityObserverImpl
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Named
-import javax.inject.Qualifier
+import okhttp3.OkHttpClient
 import javax.inject.Singleton
 
 
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
+    @Provides
+    @Singleton
+    fun provideOkHttpClient(userPrefs: UserPreferences): OkHttpClient {
+        return OkHttpClient.Builder()
+            .addInterceptor(ApiKeyInterceptor(Constants.API_KEY))
+            .addInterceptor(ApiTokenInterceptor(userPrefs))
+            .build()
+    }
 
     @Provides
     @Singleton
-    fun provideAppSettingsRepository(
-        dataStore: DataStore<AppSettings>
-    ): AppSettingRepository = AppSettingsRepositoryImpl(dataStore)
+    fun provideMoshi(): Moshi {
+        return Moshi
+            .Builder()
+            .add(KotlinJsonAdapterFactory())
+            .build()
+    }
 
     @Provides
     @Singleton
-    fun provideValidateEmail(): ValidateEmail = ValidateEmail()
+    fun provideSharedPrefs(@ApplicationContext context: Context): SharedPreferences {
+        return context.getSharedPreferences("Prefs", Context.MODE_PRIVATE)
+    }
 
     @Provides
     @Singleton
-    fun provideValidatePassword(): ValidatePassword = ValidatePassword()
-
-    @Provides
-    @Singleton
-    fun provideValidateUsername(): ValidateUsername = ValidateUsername()
-
+    fun provideInternetConnectivityObserverProd(
+        @ApplicationContext context: Context
+    ): InternetConnectivityObserver {
+        return InternetConnectivityObserverImpl(context)
+    }
 
 }
-
-@Qualifier
-@Named("AuthDao.PROD.usingBinds")
-annotation class AuthDaoProdUsingBinds
