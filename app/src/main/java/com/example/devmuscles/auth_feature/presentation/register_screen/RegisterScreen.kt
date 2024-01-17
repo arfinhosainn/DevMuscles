@@ -1,5 +1,7 @@
 package com.example.devmuscles.auth_feature.presentation.register_screen
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -21,34 +23,82 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.devmuscles.R
 import com.example.devmuscles.auth_feature.presentation.components.EmailField
 import com.example.devmuscles.auth_feature.presentation.components.PasswordField
 import com.example.devmuscles.core.appdesignsystem.common.modifiers.devMusclesSmallButton
 import com.example.devmuscles.core.appdesignsystem.common.modifiers.devMusclesWideButton
-import com.example.devmuscles.core.appdesignsystem.common.modifiers.extraLargeHeight
+import com.example.devmuscles.core.appdesignsystem.common.modifiers.extraSmallHeight
 import com.example.devmuscles.core.appdesignsystem.common.modifiers.hugeHeight
 import com.example.devmuscles.core.appdesignsystem.common.modifiers.largeWidth
 import com.example.devmuscles.core.appdesignsystem.common.modifiers.mediumHeight
 import com.example.devmuscles.core.appdesignsystem.common.modifiers.mediumWidth
 import com.example.devmuscles.core.appdesignsystem.theme.fonts
+import com.example.devmuscles.core.util.InternetConnectivityObserver.InternetAvailabilityIndicator
+import com.example.devmuscles.core.util.InternetConnectivityObserver.InternetConnectivityObserver
 import com.example.devmuscles.core.util.UiText
+import com.example.devmuscles.core.util.keyboardVisibilityObserver
+
+
+@Composable
+fun RegistrationScreen(
+    viewModel: RegisterViewModel = hiltViewModel()
+) {
+
+    val registerState by viewModel.registerState.collectAsState()
+    val connectivityState by viewModel.onlineState.collectAsState(
+        initial =
+        InternetConnectivityObserver.OnlineStatus.OFFLINE
+    ) //must start as Offline
+
+    RegisterScreenContent(
+        state = registerState,
+        onAction = viewModel::sendEvent
+    )
+
+    InternetAvailabilityIndicator(connectivityState = connectivityState)
+
+
+}
+
 
 @Composable
 fun RegisterScreenContent(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    state: RegisterState,
+    onAction: (RegisterEvent) -> Unit
 ) {
+
+    val focusManager = LocalFocusManager.current
+    val isKeyboardOpen by keyboardVisibilityObserver()
+
+    fun performRegister() {
+        onAction(
+            RegisterEvent.Register(
+                username = state.username,
+                email = state.email,
+                password = state.password,
+                confirmPassword = state.confirmPassword
+            )
+        )
+        focusManager.clearFocus()
+    }
+
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -117,38 +167,85 @@ fun RegisterScreenContent(
                 .padding(horizontal = 32.dp)
         ) {
 
+
             // • EMAIL
             EmailField(
-                value = "",
+                value = state.username,
                 isError = false,
-                onValueChange = {})
+                onValueChange = {
+                    onAction(RegisterEvent.UpdateUsername(it))
+                })
+
+            // • EMAIL
+            EmailField(
+                value = state.email,
+                isError = false,
+                onValueChange = {
+                    onAction(RegisterEvent.UpdateEmail(it))
+                })
+            AnimatedVisibility(state.isInvalidEmail && state.isInvalidEmailMessageVisible) {
+                Text(text = stringResource(R.string.error_invalid_username), color = Color.Red)
+            }
             Spacer(modifier = Modifier.mediumHeight())
 
             // • PASSWORD
             PasswordField(
-                value = "",
+                value = state.password,
                 isError = false,
-                clickTogglePasswordVisibility = { /*TODO*/ },
-                onValueChange = {},
-                imeAction = ImeAction.Done
+                isPasswordVisible = state.isPasswordVisible,
+                clickTogglePasswordVisibility = {
+                    onAction(RegisterEvent.SetIsPasswordVisible(!state.isPasswordVisible))
+                },
+                onValueChange = {
+                    onAction(RegisterEvent.UpdatePassword(it))
+                },
+                imeAction = ImeAction.Next
             )
+            if (state.isInvalidPassword && state.isInvalidPasswordMessageVisible) {
+                Text(text = stringResource(R.string.error_invalid_password), color = Color.Red)
+            }
             Spacer(modifier = Modifier.mediumHeight())
             // • CONFIRM PASSWORD
             PasswordField(
                 label = UiText.Res(R.string.register_label_confirm_password).get,
-                value = "",
-                isError = false,
+                value = state.confirmPassword,
+                isError = state.isInvalidConfirmPassword,
                 onValueChange = {
-
+                    onAction(RegisterEvent.UpdateConfirmPassword(it))
                 },
-                isPasswordVisible = false,
+                isPasswordVisible = state.isPasswordVisible,
                 clickTogglePasswordVisibility = {
+                    onAction(RegisterEvent.SetIsPasswordVisible(!state.isPasswordVisible))
                 },
                 imeAction = ImeAction.Done,
                 doneAction = {
+                    performRegister()
                 }
             )
             Spacer(modifier = Modifier.mediumHeight())
+            AnimatedVisibility(state.isInvalidConfirmPassword && state.isInvalidConfirmPasswordMessageVisible) {
+                Text(
+                    text = stringResource(R.string.error_invalid_confirm_password),
+                    color = Color.Red
+                )
+                Spacer(modifier = Modifier.extraSmallHeight())
+            }
+            // • SHOW IF MATCHING PASSWORDS
+            AnimatedVisibility(!state.isPasswordsMatch) {
+                Text(
+                    text = stringResource(R.string.register_error_passwords_do_not_match),
+                    color = Color.Red
+                )
+                Spacer(modifier = Modifier.extraSmallHeight())
+            }
+            // • SHOW PASSWORD REQUIREMENTS
+            AnimatedVisibility(state.isInvalidPasswordMessageVisible || state.isInvalidConfirmPasswordMessageVisible) {
+                Text(
+                    text = stringResource(R.string.register_password_requirements),
+                    color = Color.Red
+                )
+                Spacer(modifier = Modifier.extraSmallHeight())
+            }
 
             Spacer(modifier = modifier.hugeHeight())
 
@@ -172,7 +269,10 @@ fun RegisterScreenContent(
 
                 // • Google Button
                 Button(
-                    onClick = {},
+                    onClick = {
+
+                    },
+                    enabled = !state.isLoading,
                     modifier = Modifier.devMusclesSmallButton(),
                     contentPadding = PaddingValues(0.dp),
                     colors = ButtonDefaults.buttonColors(
@@ -187,20 +287,43 @@ fun RegisterScreenContent(
                 //• SignUp button
                 Button(
                     modifier = modifier.devMusclesWideButton(),
-                    onClick = { /* Handle third button click */ },
+                    onClick = {
+                        performRegister()
+                    },
                     contentPadding = PaddingValues(0.dp),
                 ) {
                     Text(text = UiText.Res(R.string.register_button).get)
                     Icon(imageVector = Icons.Filled.ArrowRight, contentDescription = "")
+                }
+                // STATUS //////////////////////////////////////////
+
+                AnimatedVisibility(state.errorMessage != null) {
+                    state.errorMessage?.getOrNull?.let { errorMessage ->
+                        Spacer(modifier = Modifier.extraSmallHeight())
+                        Text(
+                            text = errorMessage,
+                            color = Color.Red,
+                            modifier = Modifier
+                                .animateContentSize()
+                        )
+                        Spacer(modifier = Modifier.extraSmallHeight())
+                    }
+                }
+                AnimatedVisibility(state.statusMessage != null) {
+                    state.statusMessage?.getOrNull?.let { message ->
+                        Spacer(modifier = Modifier.extraSmallHeight())
+                        Text(text = message)
+                        Spacer(modifier = Modifier.extraSmallHeight())
+                    }
                 }
             }
         }
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun PreviewRegisterScreen() {
-    RegisterScreenContent()
-
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun PreviewRegisterScreen() {
+//    RegisterScreenContent()
+//
+//}

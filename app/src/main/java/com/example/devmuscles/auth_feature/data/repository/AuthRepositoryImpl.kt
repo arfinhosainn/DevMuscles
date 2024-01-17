@@ -1,5 +1,6 @@
 package com.example.devmuscles.auth_feature.data.repository
 
+import android.util.Log
 import com.example.devmuscles.auth_feature.data.repository.remote.AuthApi
 import com.example.devmuscles.auth_feature.data.repository.remote.DTOs.auth.LoginRequest
 import com.example.devmuscles.auth_feature.data.repository.remote.DTOs.auth.RegistrationRequest
@@ -25,6 +26,7 @@ class AuthRepositoryImpl @Inject constructor(
                     password = password
                 )
             )
+            Log.d("signup", "signUp: $email")
             signIn(email, password)
         } catch (e: HttpException) {
             if (e.code() == 401) {

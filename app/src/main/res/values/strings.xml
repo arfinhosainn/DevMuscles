@@ -67,4 +67,9 @@
     <string name="error_invalid_string_resource_id">Invalid String Resource id</string>
     <string name="error_unknown_agenda_type">Unknown Agenda Type</string>
 
+    <!-- general messages -->
+    <string name="no_internet">📡 Netzwerk offline</string>
+    <string name="error_no_internet">Keine Internetverbindung</string>
+    <string name="error_network_error">Netzwerkfehler - %s</string>
+
 </resources>

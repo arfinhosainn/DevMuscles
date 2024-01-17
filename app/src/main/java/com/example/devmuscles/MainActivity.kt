@@ -11,9 +11,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.example.devmuscles.auth_feature.presentation.register_screen.RegisterScreenContent
+import com.example.devmuscles.auth_feature.presentation.register_screen.RegistrationScreen
 import com.example.devmuscles.core.appdesignsystem.theme.DevMusclesTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge(
@@ -38,7 +40,7 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
-                        RegisterScreenContent()
+                        RegistrationScreen()
                     }
 
                 }

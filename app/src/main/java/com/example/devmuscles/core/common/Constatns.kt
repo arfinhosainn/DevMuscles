@@ -1,5 +1,5 @@
 object Constants {
-    const val API_KEY = ""
+    const val API_KEY = "01639098488"
     const val BASE_URL = "https://tasky.pl-coding.com/"
     const val DATABASE_NAME = "Agenda.db"
 

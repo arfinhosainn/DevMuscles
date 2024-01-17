@@ -41,7 +41,6 @@ import javax.inject.Inject
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
     private val authRepository: AuthRepository,
-    val validateEmail: EmailPatternValidator,
     private val userDataValidator: UserDataValidator,
     private val connectivityObserver: InternetConnectivityObserver,
     private val savedStateHandle: SavedStateHandle
@@ -150,10 +149,10 @@ class RegisterViewModel @Inject constructor(
             sendEvent(RegisterEvent.ValidatePasswordsMatch)
 
             // Show status validation messages when restored from process death or coming from another screen
-            if(registerState.value.isInvalidUsername) sendEvent(RegisterEvent.ShowInvalidUsernameMessage)
-            if(registerState.value.isInvalidEmail) sendEvent(RegisterEvent.ShowInvalidEmailMessage)
-            if(registerState.value.isInvalidPassword) sendEvent(RegisterEvent.ShowInvalidPasswordMessage)
-            if(registerState.value.isInvalidConfirmPassword) sendEvent(RegisterEvent.ShowInvalidConfirmPasswordMessage)
+            if (registerState.value.isInvalidUsername) sendEvent(RegisterEvent.ShowInvalidUsernameMessage)
+            if (registerState.value.isInvalidEmail) sendEvent(RegisterEvent.ShowInvalidEmailMessage)
+            if (registerState.value.isInvalidPassword) sendEvent(RegisterEvent.ShowInvalidPasswordMessage)
+            if (registerState.value.isInvalidConfirmPassword) sendEvent(RegisterEvent.ShowInvalidConfirmPasswordMessage)
         }
     }
 
@@ -165,7 +164,7 @@ class RegisterViewModel @Inject constructor(
     ) {
         try {
             authRepository.signUp(
-                username.trim().lowercase(), email, password
+                username.trim().lowercase(), email = email, password = password
             )
             sendEvent(RegisterEvent.RegisterSuccess(UiText.Res(R.string.register_success)))
         } catch (e: Exceptions.EmailAlreadyExistsException) {

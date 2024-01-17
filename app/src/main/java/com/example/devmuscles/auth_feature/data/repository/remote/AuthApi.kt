@@ -11,21 +11,21 @@ import retrofit2.http.POST
 interface AuthApi {
 
     companion object {
-        const val BASE_URL = "http://localhost:8080/" // for local testing of the backend
+        const val BASE_URL = "http://192.168.0.7:8080/" // for local testing of the backend
         const val API_KEY = "01639098488"
     }
 
-    @POST("login")
+    @POST("signin")
     suspend fun login(
         @Body credentials: LoginRequest
     ): Response<LoginResponse>
 
-    @POST("register")
+    @POST("signup")
     suspend fun register(
         @Body credentials: RegistrationRequest
     )
 
-    @GET("/authenticate")
+    @GET("authenticate")
     suspend fun authenticate()
 
 
