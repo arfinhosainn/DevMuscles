@@ -14,9 +14,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowRight
-import androidx.compose.material.icons.filled.Deblur
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -34,19 +35,19 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.devmuscles.R
 import com.example.devmuscles.auth_feature.presentation.components.EmailField
+import com.example.devmuscles.auth_feature.presentation.components.NameField
 import com.example.devmuscles.auth_feature.presentation.components.PasswordField
-import com.example.devmuscles.core.appdesignsystem.common.modifiers.devMusclesSmallButton
+import com.example.devmuscles.core.appdesignsystem.common.modifiers.XXLargeHeight
 import com.example.devmuscles.core.appdesignsystem.common.modifiers.devMusclesWideButton
 import com.example.devmuscles.core.appdesignsystem.common.modifiers.extraSmallHeight
-import com.example.devmuscles.core.appdesignsystem.common.modifiers.hugeHeight
-import com.example.devmuscles.core.appdesignsystem.common.modifiers.largeWidth
 import com.example.devmuscles.core.appdesignsystem.common.modifiers.mediumHeight
-import com.example.devmuscles.core.appdesignsystem.common.modifiers.mediumWidth
+import com.example.devmuscles.core.appdesignsystem.theme.DevMusclesTheme
 import com.example.devmuscles.core.appdesignsystem.theme.fonts
 import com.example.devmuscles.core.util.InternetConnectivityObserver.InternetAvailabilityIndicator
 import com.example.devmuscles.core.util.InternetConnectivityObserver.InternetConnectivityObserver
@@ -85,6 +86,7 @@ fun RegisterScreenContent(
 
     val focusManager = LocalFocusManager.current
     val isKeyboardOpen by keyboardVisibilityObserver()
+    val scrollState = rememberScrollState()
 
     fun performRegister() {
         onAction(
@@ -102,9 +104,10 @@ fun RegisterScreenContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(scrollState)
             .background(color = MaterialTheme.colorScheme.onSurface),
         horizontalAlignment = Alignment.CenterHorizontally
-    ) {
+    ) col1@{
 
         Box(
             modifier = Modifier
@@ -144,7 +147,7 @@ fun RegisterScreenContent(
                 fontSize = 38.sp,
                 style = MaterialTheme.typography.headlineLarge,
                 fontWeight = FontWeight.Normal,
-                color = MaterialTheme.colorScheme.surface,
+                color = MaterialTheme.colorScheme.secondary,
                 fontFamily = fonts
             )
             Text(
@@ -156,7 +159,7 @@ fun RegisterScreenContent(
                 style = MaterialTheme.typography.bodyLarge,
                 fontWeight = FontWeight.Normal,
                 lineHeight = 16.sp,
-                color = MaterialTheme.colorScheme.surface,
+                color = MaterialTheme.colorScheme.secondary,
                 fontFamily = fonts
             )
 
@@ -165,16 +168,15 @@ fun RegisterScreenContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 32.dp)
-        ) {
+        ) col2@{
 
-
-            // • EMAIL
-            EmailField(
-                value = state.username,
+            NameField(value = state.username,
                 isError = false,
                 onValueChange = {
                     onAction(RegisterEvent.UpdateUsername(it))
                 })
+
+            Spacer(modifier = Modifier.mediumHeight())
 
             // • EMAIL
             EmailField(
@@ -184,7 +186,7 @@ fun RegisterScreenContent(
                     onAction(RegisterEvent.UpdateEmail(it))
                 })
             AnimatedVisibility(state.isInvalidEmail && state.isInvalidEmailMessageVisible) {
-                Text(text = stringResource(R.string.error_invalid_username), color = Color.Red)
+                Text(text = stringResource(R.string.error_invalid_email), color = Color.Red)
             }
             Spacer(modifier = Modifier.mediumHeight())
 
@@ -247,43 +249,12 @@ fun RegisterScreenContent(
                 Spacer(modifier = Modifier.extraSmallHeight())
             }
 
-            Spacer(modifier = modifier.hugeHeight())
+            Spacer(modifier = modifier.XXLargeHeight())
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-
-                // • Apple Button
-                Button(
-                    onClick = {},
-                    modifier = Modifier.devMusclesSmallButton(),
-                    contentPadding = PaddingValues(0.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.primaryContainer
-                    )
-                ) {
-                    Icon(imageVector = Icons.Filled.Deblur, contentDescription = "")
-                }
-                Spacer(modifier = Modifier.mediumWidth())
-
-                // • Google Button
-                Button(
-                    onClick = {
-
-                    },
-                    enabled = !state.isLoading,
-                    modifier = Modifier.devMusclesSmallButton(),
-                    contentPadding = PaddingValues(0.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.primaryContainer
-                    )
-                ) {
-                    Icon(imageVector = Icons.Filled.Deblur, contentDescription = "")
-                }
-
-                Spacer(modifier = Modifier.largeWidth())
-
                 //• SignUp button
                 Button(
                     modifier = modifier.devMusclesWideButton(),
@@ -291,11 +262,22 @@ fun RegisterScreenContent(
                         performRegister()
                     },
                     contentPadding = PaddingValues(0.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor =
+                        MaterialTheme.colorScheme.secondary
+                    )
                 ) {
-                    Text(text = UiText.Res(R.string.register_button).get)
-                    Icon(imageVector = Icons.Filled.ArrowRight, contentDescription = "")
+                    Text(
+                        text = UiText.Res(R.string.register_button).get,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                    Icon(
+                        imageVector = Icons.Filled.ArrowRight,
+                        contentDescription = "",
+                        tint = MaterialTheme.colorScheme.primary
+                    )
                 }
-                // STATUS //////////////////////////////////////////
+                // STATUS ////
 
                 AnimatedVisibility(state.errorMessage != null) {
                     state.errorMessage?.getOrNull?.let { errorMessage ->
@@ -321,9 +303,15 @@ fun RegisterScreenContent(
     }
 }
 
-//@Preview(showBackground = true)
-//@Composable
-//fun PreviewRegisterScreen() {
-//    RegisterScreenContent()
-//
-//}
+
+@Preview(
+    showBackground = true
+)
+@Composable
+fun PreviewRegisterScreen() {
+    DevMusclesTheme(darkTheme = false) {
+        RegisterScreenContent(
+            state = RegisterState(),
+            onAction = {})
+    }
+}

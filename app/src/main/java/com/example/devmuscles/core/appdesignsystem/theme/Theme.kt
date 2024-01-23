@@ -23,7 +23,7 @@ private fun darkColorPalette(): ColorScheme {
         surface = Color.Black,
         onSurface = Color.White,
         onBackground = Color.White,
-        secondary = Color.Black
+        secondary = Color.White
 
     )
 }

@@ -11,6 +11,7 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -72,7 +73,8 @@ fun PasswordField(
             focusedContainerColor = Color.Transparent,
             unfocusedContainerColor = Color.Transparent,
             errorContainerColor = Color.Transparent,
-            focusedIndicatorColor = Color.DarkGray
+            focusedIndicatorColor = Color.DarkGray,
+            focusedLabelColor = MaterialTheme.colorScheme.primary
         ),
         isError = isError,
         onValueChange = onValueChange,
@@ -89,16 +91,19 @@ fun PasswordField(
         trailingIcon = {
             val isPasswordValid = !isError
 
-            val validImage = if (isPasswordValid)
-                Icons.Filled.Check
-            else
-                Icons.Filled.Error
+            val validImage =
+                if (isPasswordValid)
+                    Icons.Filled.Check
+                else
+                    Icons.Filled.Error
 
+            // localized description for accessibility services
             val validDescription =
                 if (isPasswordValid)
                     UiText.Res(R.string.emailField_description_isValid).get
                 else
                     UiText.Res(R.string.emailField_description_isInvalid).get
+
             val passwordVisibleImage = if (isPasswordVisible)
                 Icons.Default.Visibility
             else
